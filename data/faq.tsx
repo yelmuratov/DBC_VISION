@@ -1,30 +1,64 @@
 import * as React from 'react'
 
 const faq = {
-  title: 'Frequently asked questions',
-  // description: '',
+  title: 'Frequently Asked Questions',
+  // description: '', // Removed description since it wasn't provided
   items: [
     {
-      q: 'How many products can I use Saas UI Pro for?',
+      q: 'How does DBCVision recognize customers?',
       a: (
         <>
-          The single license can be used for one commercial application or SaaS
-          product and unlimited internal tools. You can buy as many licenses as
-          you need. <br /> The unlimited license does not have any restrictions.
+          DBCVision uses AI-powered vision analytics to differentiate between employees and real customers, track new visitors, and identify returning clients for deeper insights.
         </>
       ),
     },
     {
-      q: 'Can I use Saas UI Pro for client work?',
-      a: "Yes, that's totally up to you, as long as it fits the license you purchase.",
+      q: 'Can DBCVision work for multiple locations?',
+      a: (
+        <>
+          Yes! Our system scales effortlessly, allowing you to track customer behavior across multiple stores, clinics, or coffee shops with unified analytics.
+        </>
+      ),
     },
     {
-      q: 'Can I use Saas UI Pro for Open Source projects?',
-      a: 'No currently not. A large part of Saas UI is already released under MIT license. We try to give back to the community as much as possible.',
+      q: 'Does DBCVision require special hardware?',
+      a: (
+        <>
+          DBCVision works with standard security cameras. No need for expensive upgrades—our AI processes existing visual data to generate insights.
+        </>
+      ),
     },
     {
-      q: 'Does Saas UI include Figma, Sketch or other design files?',
-      a: 'No, Saas UI does not include any design assets. Maintaining design resources costs a lot of extra effort. We believe small teams can move much faster by designing directly in code, with help of Storybooks.',
+      q: 'How does the system handle returning customers?',
+      a: (
+        <>
+          Unlike competitors, DBCVision accurately recognizes returning visitors—helping coffee shops track loyal customers and retailers optimize customer retention.
+        </>
+      ),
+    },
+    {
+      q: 'Can I integrate DBCVision with my existing POS or CRM?',
+      a: (
+        <>
+          Absolutely! We provide robust APIs that seamlessly integrate with your POS, CRM, or other business tools, ensuring smooth data synchronization.
+        </>
+      ),
+    },
+    {
+      q: 'Where is my data stored?',
+      a: (
+        <>
+          You can choose cloud-based or on-premise deployment, giving you full control over your data security and privacy.
+        </>
+      ),
+    },
+    {
+      q: 'Does DBCVision require a monthly subscription?',
+      a: (
+        <>
+          We offer flexible pricing plans, including subscription-based models and one-time licensing for businesses of all sizes.
+        </>
+      ),
     },
   ],
 }

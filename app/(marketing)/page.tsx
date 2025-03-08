@@ -1,5 +1,5 @@
 'use client'
-
+import '../../global.css'
 import {
   Box,
   ButtonGroup,
@@ -8,11 +8,9 @@ import {
   HStack,
   Heading,
   Icon,
-  IconButton,
   Stack,
   Text,
   VStack,
-  useClipboard,
   Input,
   Textarea,
   Button,
@@ -27,9 +25,7 @@ import Image from 'next/image'
 import {
   FiArrowRight,
   FiBox,
-  FiCheck,
   FiCode,
-  FiCopy,
   FiFlag,
   FiGrid,
   FiLock,
@@ -41,8 +37,9 @@ import {
   FiToggleLeft,
   FiTrendingUp,
   FiUserPlus,
-  FiTruck,
+  
 } from 'react-icons/fi'
+import { BiPlusMedical } from "react-icons/bi";
 import * as React from 'react'
 import { ButtonLink } from '#components/button-link/button-link'
 import { Faq } from '#components/faq'
@@ -54,7 +51,6 @@ import { FallInPlace } from '#components/motion/fall-in-place'
 import { Em } from '#components/typography'
 import faq from '#data/faq'
 
-
 export default function Home() {
   return (
     <Box>
@@ -65,6 +61,203 @@ export default function Home() {
       <HowItWorksSection />
       <FaqSection />
       <ContactSection />
+    </Box>
+  )
+}
+
+const typingHeaders = [
+  "Turn Every Visit into Actionable Insights",
+  "Recognize, Analyze, Optimize – Smarter Customer Tracking",
+  "Know Your Customers. Grow Your Business.",
+  "Real-Time Visitor Analytics for Smarter Retail",
+  "Recognize Returning Customers, Maximize Loyalty",
+  "Your Store, Your Data, Your Advantage",
+  "See More Than Numbers—Understand Your Customers",
+  "Not Just Faces—Future Customers",
+  "Know Your Customers – Not Just Your Faces",
+  "We See the Difference – Employees Aren’t Customers.",
+  "No More Fake Data. Just Real Customer Insights.",
+];
+
+const HeroSection: React.FC = () => {
+  const [currentHeaderIndex, setCurrentHeaderIndex] = React.useState(0);
+  const [displayedText, setDisplayedText] = React.useState('');
+  const [isTyping, setIsTyping] = React.useState(true);
+  const [flicker, setFlicker] = React.useState(false); // For thunder flicker effect
+
+  React.useEffect(() => {
+    const currentHeader = typingHeaders[currentHeaderIndex];
+    let index = 0;
+    let interval: NodeJS.Timeout;
+
+    if (isTyping) {
+      // Trigger flicker effect at the start of typing
+      setFlicker(true);
+      interval = setInterval(() => {
+        if (index <= currentHeader.length) {
+          setDisplayedText(currentHeader.slice(0, index));
+          index++;
+          // Randomly trigger flicker during typing for dramatic effect
+          if (Math.random() > 0.8) {
+            setFlicker(true);
+          }
+        } else {
+          clearInterval(interval);
+          setTimeout(() => setIsTyping(false), 1000); // Pause before erasing
+        }
+      }, 100); // Typing speed
+    } else {
+      interval = setInterval(() => {
+        setFlicker(true); // Flicker while erasing
+        if (index >= 0) {
+          setDisplayedText(currentHeader.slice(0, index));
+          index--;
+        } else {
+          clearInterval(interval);
+          setCurrentHeaderIndex((prev) => (prev + 1) % typingHeaders.length);
+          setIsTyping(true); // Start typing the next header
+        }
+      }, 50); // Erasing speed
+    }
+
+    return () => clearInterval(interval); // Cleanup on unmount or re-run
+  }, [currentHeaderIndex, isTyping]);
+
+  return (
+    <Box position="relative" overflow="hidden">
+      <BackgroundGradient height="100%" zIndex="-1" />
+      <Container 
+        maxW={{ base: "container.xl", lg: "container.2xl" }} 
+        pt={{ base: 40, lg: 60 }} 
+        pb="40"
+      >
+        <Stack 
+          direction={{ base: 'column', lg: 'row' }} 
+          alignItems="center"
+          justifyContent="center"
+          spacing={{ base: 8, lg: 12 }}
+          marginBottom={{ base: 30 }}
+        >
+          <Hero
+            id="home"
+            justifyContent="flex-start"
+            px="0"
+            minH="600px"
+            display="flex"
+            flexDirection="column"
+            alignItems={{ base: "center", lg: "flex-start" }}
+            textAlign={{ base: "center", lg: "left" }}
+            title={
+              <Box
+                as="span"
+                fontSize={{ base: "2xl", lg: "4xl" }}
+                fontWeight="bold"
+                minHeight="180px"
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                className={flicker ? "thunder-flicker thunder-shake" : ""} // Apply thunder effects
+              >
+                DBCVISION- {displayedText}
+              </Box>
+            }
+            description={
+              <Box fontWeight="medium">
+                DBCVision turns every store visit into precise, AI-driven insights—helping you track real customers, analyze trends, and make data-backed decisions that drive growth.
+              </Box>
+            }
+          >
+            <FallInPlace delay={0.8}>
+              <HStack pt="4" pb="12" spacing="8"></HStack>
+              <ButtonGroup spacing={4} alignItems="center">
+                <ButtonLink colorScheme="primary" size="lg" href="#contact">
+                  Get Started
+                </ButtonLink>
+                <ButtonLink
+                  size="lg"
+                  href="#contact"
+                  variant="outline"
+                  rightIcon={
+                    <Icon
+                      as={FiArrowRight}
+                      sx={{
+                        transitionProperty: 'common',
+                        transitionDuration: 'normal',
+                        '.chakra-button:hover &': {
+                          transform: 'translate(5px)',
+                        },
+                      }}
+                    />
+                  }
+                >
+                  Request Demo
+                </ButtonLink>
+              </ButtonGroup>
+            </FallInPlace>
+          </Hero>
+          <Box
+            height="600px"
+            display={{ base: 'none', lg: 'block' }}
+            flexShrink={0}
+            width={{ lg: "600px", xl: "700px" }}
+            maxW="1100px"
+            margin="0 auto"
+          >
+            <FallInPlace delay={1}>
+              <Box overflow="hidden" height="100%" marginTop={{ base: 0, lg: 20 }}>
+                <Image
+                  src="/static/images/dashboard.png"
+                  width={1200}
+                  height={762}
+                  alt="DBCVision Dashboard Screenshot"
+                  quality="75"
+                  priority
+                  style={{ objectFit: 'contain' }}
+                />
+              </Box>
+            </FallInPlace>
+          </Box>
+        </Stack>
+      </Container>
+
+      <Features
+        id="benefits"
+        columns={[1, 2, 4]}
+        iconSize={4}
+        innerWidth="container.xl"
+        pt="20"
+        features={[
+          {
+            title: 'Smarter AI, Sharper Insights',
+            icon: FiSmile,
+            description: 'Leverage advanced AI to track real customer behavior with unmatched accuracy.',
+            iconPosition: 'left',
+            delay: 0.6,
+          },
+          {
+            title: 'Built to Scale, Ready to Grow',
+            icon: FiSliders,
+            description: "Our system adapts effortlessly, whether you're running one store or a nationwide chain.",
+            iconPosition: 'left',
+            delay: 0.8,
+          },
+          {
+            title: 'Data That Works for You',
+            icon: FiGrid,
+            description: 'Transform raw visitor data into powerful insights that fuel smarter decisions.',
+            iconPosition: 'left',
+            delay: 1,
+          },
+          {
+            title: 'Efficiency Redefined',
+            icon: FiThumbsUp,
+            description: 'Streamline operations, cut unnecessary costs, and boost performance—fast.',
+            iconPosition: 'left',
+            delay: 1.1,
+          },
+        ]}
+        reveal={FallInPlace}
+      />
     </Box>
   )
 }
@@ -161,14 +354,12 @@ const ContactSection: React.FC = () => {
           </Text>
         </VStack>
 
-        {/* Main Content: Form and Map */}
         <Stack direction={{ base: 'column', lg: 'row' }} spacing="8">
-          {/* Contact Form */}
           <Box
             flex="1"
             p="8"
-            bg="white" // Original white background
-            _dark={{ bg: 'gray.800' }} // Original dark mode background
+            bg="white"
+            _dark={{ bg: 'gray.800' }}
             borderRadius="lg"
             boxShadow="md"
           >
@@ -186,8 +377,8 @@ const ContactSection: React.FC = () => {
                     size="lg"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    borderColor="gray.300" // Original border color
-                    _placeholder={{ color: 'gray.500' }} // Original placeholder color
+                    borderColor="gray.300"
+                    _placeholder={{ color: 'gray.500' }}
                   />
                   <FormErrorMessage>{errors.name}</FormErrorMessage>
                 </FormControl>
@@ -233,7 +424,7 @@ const ContactSection: React.FC = () => {
                 </FormControl>
                 <Button
                   type="submit"
-                  colorScheme="purple" // Original button color
+                  colorScheme="purple"
                   size="lg"
                   w={{ base: 'full', md: 'auto' }}
                 >
@@ -243,7 +434,6 @@ const ContactSection: React.FC = () => {
             </VStack>
           </Box>
 
-          {/* Map and Location */}
           <Box flex="1">
             <Box
               borderRadius="lg"
@@ -252,7 +442,15 @@ const ContactSection: React.FC = () => {
               height="500px"
               bg="gray.200"
             >
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000.432610126551!2d69.21321217667075!3d41.23413360548623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae61001f19c4d5%3A0x464fe6a3808df354!2sAralTech!5e0!3m2!1sen!2s!4v1741266837620!5m2!1sen!2s" width="600" height="750" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000.432610126551!2d69.21321217667075!3d41.23413360548623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae61001f19c4d5%3A0x464fe6a3808df354!2sAralTech!5e0!3m2!1sen!2s!4v1741266837620!5m2!1sen!2s" 
+                width="600" 
+                height="750" 
+                style={{ border: 0 }} 
+                allowFullScreen 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </Box>
             <VStack align="start" spacing="2">
               <Heading fontSize="xl">DBC VISION</Heading>
@@ -263,7 +461,6 @@ const ContactSection: React.FC = () => {
           </Box>
         </Stack>
 
-        {/* Bottom Banner */}
         <Box
           mt="12"
           py="6"
@@ -295,139 +492,19 @@ const ContactSection: React.FC = () => {
   )
 }
 
-const HeroSection: React.FC = () => {
-  return (
-    <Box position="relative" overflow="hidden">
-      <BackgroundGradient height="100%" zIndex="-1" />
-      <Container maxW="container.xl" pt={{ base: 40, lg: 60 }} pb="40">
-        <Stack direction={{ base: 'column', lg: 'row' }} alignItems="center">
-          <Hero
-            id="home"
-            justifyContent="flex-start"
-            px="0"
-            title={
-              <FallInPlace>
-                Unlock the Power of
-                <Br /> Intelligent Vision
-              </FallInPlace>
-            }
-            description={
-              <FallInPlace delay={0.4} fontWeight="medium">
-                DBCVision delivers cutting-edge <Em>AI-powered analytics</Em>
-                <Br /> to transform your business operations and decision-making,
-                <Br /> enabling smarter insights and accelerated growth.
-              </FallInPlace>
-            }
-          >
-            <FallInPlace delay={0.8}>
-              <HStack pt="4" pb="12" spacing="8"></HStack>
-              <ButtonGroup spacing={4} alignItems="center">
-                <ButtonLink colorScheme="primary" size="lg" href="#contact">
-                  Get Started
-                </ButtonLink>
-                <ButtonLink
-                  size="lg"
-                  href="#contact"
-                  variant="outline"
-                  rightIcon={
-                    <Icon
-                      as={FiArrowRight}
-                      sx={{
-                        transitionProperty: 'common',
-                        transitionDuration: 'normal',
-                        '.chakra-button:hover &': {
-                          transform: 'translate(5px)',
-                        },
-                      }}
-                    />
-                  }
-                >
-                  Request Demo
-                </ButtonLink>
-              </ButtonGroup>
-            </FallInPlace>
-          </Hero>
-          <Box
-            height="600px"
-            position="absolute"
-            display={{ base: 'none', lg: 'block' }}
-            left={{ lg: '60%', xl: '55%' }}
-            width="80vw"
-            maxW="1100px"
-            margin="0 auto"
-          >
-            <FallInPlace delay={1}>
-              <Box overflow="hidden" height="100%">
-                <Image
-                  src="/static/images/dashboard.png"
-                  width={1200}
-                  height={762}
-                  alt="DBCVision Dashboard Screenshot"
-                  quality="75"
-                  priority
-                />
-              </Box>
-            </FallInPlace>
-          </Box>
-        </Stack>
-      </Container>
-
-      <Features
-        id="benefits"
-        columns={[1, 2, 4]}
-        iconSize={4}
-        innerWidth="container.xl"
-        pt="20"
-        features={[
-          {
-            title: 'AI-driven',
-            icon: FiSmile,
-            description: 'Harness advanced artificial intelligence for precise, real-time analytics.',
-            iconPosition: 'left',
-            delay: 0.6,
-          },
-          {
-            title: 'Scalable',
-            icon: FiSliders,
-            description: 'Solutions designed to seamlessly scale with your business.',
-            iconPosition: 'left',
-            delay: 0.8,
-          },
-          {
-            title: 'Actionable Insights',
-            icon: FiGrid,
-            description: 'Turn data into actionable decisions that drive results.',
-            iconPosition: 'left',
-            delay: 1,
-          },
-          {
-            title: 'Efficient',
-            icon: FiThumbsUp,
-            description: 'Optimize operations, reduce costs, and enhance productivity rapidly.',
-            iconPosition: 'left',
-            delay: 1.1,
-          },
-        ]}
-        reveal={FallInPlace}
-      />
-    </Box>
-  )
-}
-
 const HighlightsSection = () => {
   return (
     <Highlights id="highlights">
-      <HighlightsItem colSpan={[1, null, 2]} title="Advanced Vision Analytics">
+      <HighlightsItem colSpan={[1, null, 2]} title="AI-Powered Vision, Smarter Retail">
         <VStack alignItems="flex-start" spacing="8">
           <Text color="muted" fontSize="xl">
-            Discover the power of <Em>AI-driven analytics</Em> with DBCVision.
-            Gain real-time insights, streamline operations, and improve decision-making with intuitive visual data analysis.
+          Unlock the full potential of <Em>AI-driven</Em> analytics with DBCVision. Track real customer behavior, visualize trends instantly, and make data-driven decisions that boost your business.
           </Text>
         </VStack>
       </HighlightsItem>
       <HighlightsItem title="Why DBCVision?">
         <Text color="muted" fontSize="lg">
-          We integrate advanced artificial intelligence with your existing systems to ensure you get the most from your data, accelerating growth and maximizing operational efficiency.
+        We seamlessly integrate advanced AI into your existing systems, ensuring accurate customer tracking—not miscounted employees. Identify returning clients, analyze real visitor trends, and optimize your operations to drive growth and efficiency.
         </Text>
       </HighlightsItem>
     </Highlights>
@@ -445,15 +522,13 @@ const FeaturesSection = () => {
           textAlign="left"
           as="p"
         >
-          Beyond Basic Analytics.
-          <Br /> Vision That Drives Results.
+          Beyond Counting. 
+          <Br /> Real Vision.
         </Heading>
       }
       description={
         <>
-          DBCVision delivers powerful AI-driven tools to turn visual data
-          <Br />
-          into insights that enhance efficiency and fuel business growth.
+          DBCVision transforms store visits into actionable insights, helping you track real customers, analyze trends, and optimize operations with precision.
         </>
       }
       align="left"
@@ -461,61 +536,57 @@ const FeaturesSection = () => {
       iconSize={4}
       features={[
         {
-          title: 'Real-Time Insights.',
+          title: 'Instant Insights',
           icon: FiBox,
-          description: 'Process and analyze visual data instantly to make faster, smarter decisions.',
+          description: 'Process real-time visual data for smarter, faster decisions.',
           variant: 'inline',
         },
         {
-          title: 'AI-Powered Detection.',
+          title: 'AI That Knows More',
           icon: FiLock,
-          description: 'Advanced algorithms identify patterns and anomalies with pinpoint accuracy.',
+          description: 'Recognize returning customers, detect trends, and eliminate false counts.',
           variant: 'inline',
         },
         {
-          title: 'Actionable Reports.',
+          title: 'Custom Reports',
           icon: FiSearch,
-          description: 'Detailed, customizable reports designed to guide your strategic planning.',
+          description: 'Tailored analytics to refine strategy and drive growth.',
           variant: 'inline',
         },
         {
-          title: 'Seamless Integration.',
+          title: 'Effortless Integration',
           icon: FiUserPlus,
-          description: 'Easily connect with your existing systems or deploy on our secure cloud platform.',
+          description: 'Connect seamlessly with your existing systems or deploy on our secure cloud.',
           variant: 'inline',
         },
         {
-          title: 'Scalable Performance.',
+          title: 'Scalable & Future-Ready',
           icon: FiFlag,
-          description: 'Handles growing data volumes effortlessly, keeping your operations smooth.',
+          description: 'Handles growing data effortlessly, keeping your business ahead.',
           variant: 'inline',
         },
         {
-          title: 'Efficiency Boost.',
+          title: 'Smart Alerts',
+          icon: FiTerminal,
+          description: 'Get notified instantly about key customer trends and critical changes.',
+          variant: 'inline',
+        },
+        {
+          title: 'Designed for You',
+          icon: FiToggleLeft,
+          description: 'Interactive dashboards in light & dark mode for a seamless experience.',
+          variant: 'inline',
+        },
+        {
+          title: 'Backed by AI Experts',
+          icon: FiCode,
+          description: 'Built for precision, supported for success.',
+          variant: 'inline',
+        },
+        {
+          title: 'Efficiency Boost', // Kept this as the 9th item since you provided 8
           icon: FiTrendingUp,
           description: 'Optimize workflows and reduce costs with automated vision analytics.',
-          variant: 'inline',
-        },
-        {
-          title: 'Custom Dashboards.',
-          icon: FiToggleLeft,
-          description: 'Intuitive interfaces tailored to your needs, available in light and dark modes.',
-          variant: 'inline',
-        },
-        {
-          title: 'Smart Alerts.',
-          icon: FiTerminal,
-          description: 'Get instant notifications about critical events to stay proactive.',
-          variant: 'inline',
-        },
-        {
-          title: 'Expert-Backed.',
-          icon: FiCode,
-          description: (
-            <>
-              Built by vision AI specialists with full support to ensure your success.
-            </>
-          ),
           variant: 'inline',
         },
       ]}
@@ -550,7 +621,7 @@ const SolutionsSection = () => {
               Retail
             </Text>
             <Text color="muted">
-              Monitor inventory, optimize stock levels, and enhance customer experiences with real-time vision analytics.
+              Track real customers, analyze shopping patterns, and optimize store performance with AI-powered visitor insights—not false employee counts.
             </Text>
           </VStack>
           <VStack
@@ -562,12 +633,12 @@ const SolutionsSection = () => {
             align="start"
             flex="1"
           >
-            <Icon as={FiTruck} boxSize="6" color="primary.500" />
+            <Icon as={BiPlusMedical} boxSize="6" color="primary.500" />
             <Text fontWeight="bold" fontSize="xl" mb="2">
-              Logistics
+              Clinics & Pharmacies
             </Text>
             <Text color="muted">
-              Track shipments, detect issues, and streamline operations with AI-powered visual monitoring.
+              Understand foot traffic trends, identify peak hours, and improve customer service efficiency with real-time analytics.
             </Text>
           </VStack>
           <VStack
@@ -581,10 +652,27 @@ const SolutionsSection = () => {
           >
             <Icon as={FiSettings} boxSize="6" color="primary.500" />
             <Text fontWeight="bold" fontSize="xl" mb="2">
-              Manufacturing
+              Coffee Shops & Cafés
             </Text>
             <Text color="muted">
-              Improve quality control and reduce downtime with precise anomaly detection and reporting.
+              Know if customers are first-time buyers or returning regulars. Enhance loyalty strategies and personalize customer engagement.
+            </Text>
+          </VStack>
+          <VStack
+            p="6"
+            bg="white"
+            _dark={{ bg: 'gray.800' }}
+            borderRadius="lg"
+            boxShadow="md"
+            align="start"
+            flex="1"
+          >
+            <Icon as={FiBox} boxSize="6" color="primary.500" /> {/* Replaced FiStore with FiBox */}
+            <Text fontWeight="bold" fontSize="xl" mb="2">
+              Offline Retailers
+            </Text>
+            <Text color="muted">
+              From boutique stores to supermarkets, gain deep insights into visitor behavior, busiest hours, and returning customers to drive better sales.
             </Text>
           </VStack>
         </Stack>

@@ -11,11 +11,11 @@ export const metadata: Metadata = {
     title: 'DBCVision - Leading AI Vision Analytics in 2025',
     description:
       'Transform your operations with DBCVision’s cutting-edge AI vision analytics. Serving Tashkent and beyond with real-time insights.',
-    url: 'https://dbcvision.com', // Replace with your actual domain
+    url: 'https://dbcvision.com',
     siteName: 'DBCVision',
     images: [
       {
-        url: 'https://dbcvision.com/og-image.jpg', // Replace with your OG image URL
+        url: 'https://dbcvision.com/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'DBCVision AI Analytics Platform',
